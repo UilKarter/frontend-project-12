@@ -15,10 +15,13 @@ const authSlice = createSlice({
       state.error = null
     },
     loginSuccess: (state, action) => {
+      const { token } = action.payload
+
       state.isLoading = false
-      state.token = action.payload.token
+      state.token = token
       state.error = null
-      localStorage.setItem('token', action.payload.token)
+
+      localStorage.setItem('token', token)
     },
     loginFailure: (state, action) => {
       state.isLoading = false
@@ -28,6 +31,7 @@ const authSlice = createSlice({
       state.token = null
       state.isLoading = false
       state.error = null
+
       localStorage.removeItem('token')
     },
     clearError: (state) => {
