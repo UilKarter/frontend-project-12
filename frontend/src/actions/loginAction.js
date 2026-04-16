@@ -1,4 +1,4 @@
-import loginRequest from '../api/loginReq.js'
+import loginReq from '../api/loginReq.js'
 import { toast } from 'react-toastify'
 import {
   loginStart,
@@ -10,7 +10,7 @@ const loginAction = async (navigate, dispatch, values) => {
   dispatch(loginStart())
 
   try {
-    const data = await loginRequest(values)
+    const data = await loginReq(values)
 
     const { token } = data
     const { username } = values

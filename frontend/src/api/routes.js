@@ -5,4 +5,5 @@ export default {
   updateChannelPath: id => [apiPath, 'channels', id].join('/'),
   messagesPath: () => [apiPath, 'messages'].join('/'),
   authPath: () => [apiPath, 'login'].join('/'),
+  signupPath: () => [apiPath, 'signup'].join('/'),
 }

@@ -4,6 +4,7 @@ import { ToastContainer } from 'react-toastify'
 import HomePage from './pages/HomePage'
 import LoginPage from './pages/LoginPage'
 import NotFoundPage from './pages/NotFoundPage'
+import SignupPage from './pages/SignupPage'
 import ProtectedRoute from './components/ProtectedRoute'
 
 const App = () => {
@@ -20,6 +21,7 @@ const App = () => {
         />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/404" element={<NotFoundPage />} />
+        <Route path="/signup" element={<SignupPage />} />
         <Route path="*" element={<Navigate to="/404" replace />} />
       </Routes>
 

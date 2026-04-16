@@ -23,6 +23,7 @@ import ChannelsList from '../components/parts/channels/ChannelList'
 import MessagesHeader from '../components/parts/messages/MessagesHeader'
 import MessagesList from '../components/parts/messages/MessagesList'
 import MessageInput from '../components/parts/messages/MessageInput'
+import Header from '../components/parts/Header'
 
 const HomePage = () => {
   const dispatch = useDispatch()
@@ -75,25 +76,20 @@ const HomePage = () => {
   }, [dispatch])
 
   return (
-    <div className="h-100 bg-light">
-      <div className="h-100">
-        <div className="h-100" id="chat">
-          <div className="d-flex flex-column h-100">
-            <Container className="h-100 my-4 overflow-hidden rounded shadow">
-              <Row className="h-100 bg-white flex-md-row">
-                <Col xs={5} md={3} lg={3} className="border-end px-0 bg-light flex-column h-100 d-flex">
-                  <ChannelsList />
-                </Col>
-                <Col className="d-flex flex-column p-0 h-100">
-                  <MessagesHeader channelId={currentChannelId} />
-                  <MessagesList channelId={currentChannelId} />
-                  <MessageInput channelId={currentChannelId} />
-                </Col>
-              </Row>
-            </Container>
-          </div>
-        </div>
-      </div>
+    <div className="d-flex flex-column h-100 bg-light">
+      <Header />
+      <Container className="flex-grow-1 my-4 overflow-hidden rounded shadow">
+        <Row className="h-100 bg-white flex-md-row">
+          <Col xs={5} md={3} lg={3} className="border-end px-0 bg-light flex-column h-100 d-flex">
+            <ChannelsList />
+          </Col>
+          <Col className="d-flex flex-column p-0 h-100">
+            <MessagesHeader channelId={currentChannelId} />
+            <MessagesList channelId={currentChannelId} />
+            <MessageInput channelId={currentChannelId} />
+          </Col>
+        </Row>
+      </Container>
     </div>
   )
 }
