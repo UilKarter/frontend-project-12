@@ -8,6 +8,13 @@ const messagesSlice = createSlice({
   reducers: {
     setMessages: messagesAdapter.setAll,
     postMessage: messagesAdapter.addOne,
+    removeMessagesByChannel: (state, { payload: channelId }) => {
+      const messagesToRemove = state.ids.filter(id => state.entities[id]?.channelId === channelId)
+      messagesToRemove.forEach((id) => {
+        delete state.entities[id]
+      })
+      state.ids = state.ids.filter(id => !messagesToRemove.includes(id))
+    },
   },
 })
 
@@ -15,8 +22,8 @@ export const messagesSelectors = messagesAdapter.getSelectors(state => state.mes
 
 export const {
   setMessages,
-  addMessage,
   postMessage,
+  removeMessagesByChannel,
 } = messagesSlice.actions
 
 export default messagesSlice.reducer

@@ -12,7 +12,13 @@ const channelsSlice = createSlice({
   reducers: {
     setChannels: channelsAdapter.setAll,
     addChannel: channelsAdapter.addOne,
-    removeChannel: channelsAdapter.removeOne,
+    removeChannel: (state, { payload }) => {
+      channelsAdapter.removeOne(state, payload)
+      if (state.currentChannelId === payload) {
+        const general = Object.values(state.entities).find(ch => ch?.name === 'general')
+        state.currentChannelId = general?.id || state.ids[0] || null
+      }
+    },
     renameChannel: channelsAdapter.updateOne,
 
     setCurrentChannelId: (state, action) => {

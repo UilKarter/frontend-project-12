@@ -1,7 +1,8 @@
 const apiPath = '/api/v1'
 
 export default {
-  getChannels: () => [apiPath, 'channels'].join('/'),
+  channelPath: () => [apiPath, 'channels'].join('/'),
+  updateChannelPath: id => [apiPath, 'channels', id].join('/'),
   messagesPath: () => [apiPath, 'messages'].join('/'),
   authPath: () => [apiPath, 'login'].join('/'),
 }

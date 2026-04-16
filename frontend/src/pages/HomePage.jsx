@@ -1,136 +1,99 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Container, Row, Col, ListGroup, Form, Button } from 'react-bootstrap'
+import { Container, Row, Col } from 'react-bootstrap'
 
 import getChannels from '../api/getChannels'
 import getMessages from '../api/getMessages'
-import sendMessage from '../api/sendMessage'
-
 import socket from '../socket'
 
-import { setChannels, setCurrentChannelId, channelsSelectors } from '../store/slices/channelsSlice'
-import { setMessages, messagesSelectors, postMessage } from '../store/slices/messagesSlice'
+import {
+  setChannels,
+  setCurrentChannelId,
+  addChannel,
+  renameChannel,
+  removeChannel,
+} from '../store/slices/channelsSlice'
+import {
+  setMessages,
+  postMessage,
+  removeMessagesByChannel,
+} from '../store/slices/messagesSlice'
+
+import ChannelsList from '../components/parts/Channels/ChannelList'
+import MessagesHeader from '../components/parts/messages/MessagesHeader'
+import MessagesList from '../components/parts/messages/MessagesList'
+import MessageInput from '../components/parts/messages/MessageInput'
 
 const HomePage = () => {
   const dispatch = useDispatch()
-  const [text, setText] = useState('')
-  const [isSending, setIsSending] = useState(false)
-  const channels = useSelector(channelsSelectors.selectAll)
-  const messages = useSelector(messagesSelectors.selectAll)
   const currentChannelId = useSelector(state => state.channels.currentChannelId)
-  const username = localStorage.getItem('username')
 
   useEffect(() => {
     const fetchData = async () => {
-      try {
-        const [channelsData, messagesData] = await Promise.all([
-          getChannels(),
-          getMessages(),
-        ])
+      const [channelsData, messagesData] = await Promise.all([
+        getChannels(),
+        getMessages(),
+      ])
+      dispatch(setChannels(channelsData))
+      dispatch(setMessages(messagesData))
 
-        dispatch(setChannels(channelsData))
-        dispatch(setMessages(messagesData))
-
-        const general = channelsData.find(c => c.name === 'general')
-        dispatch(setCurrentChannelId(general?.id || channelsData[0]?.id))
-      }
-      catch (err) {
-        console.error(err)
-      }
+      const general = channelsData.find(c => c.name === 'general')
+      dispatch(setCurrentChannelId(general?.id || channelsData[0]?.id))
     }
-
     fetchData()
   }, [dispatch])
+
   useEffect(() => {
-    socket.on('newMessage', (payload) => {
+    const handleNewMessage = (payload) => {
       dispatch(postMessage(payload))
-    })
+    }
+
+    const handleNewChannel = (channel) => {
+      dispatch(addChannel(channel))
+    }
+
+    const handleRenameChannel = ({ id, name }) => {
+      dispatch(renameChannel({ id, changes: { name } }))
+    }
+
+    const handleRemoveChannel = ({ id }) => {
+      dispatch(removeChannel(id))
+      dispatch(removeMessagesByChannel(id))
+    }
+
+    socket.on('newMessage', handleNewMessage)
+    socket.on('newChannel', handleNewChannel)
+    socket.on('renameChannel', handleRenameChannel)
+    socket.on('removeChannel', handleRemoveChannel)
 
     return () => {
-      socket.off('newMessage')
+      socket.off('newMessage', handleNewMessage)
+      socket.off('newChannel', handleNewChannel)
+      socket.off('renameChannel', handleRenameChannel)
+      socket.off('removeChannel', handleRemoveChannel)
     }
   }, [dispatch])
 
-  const filteredMessages = messages.filter(
-    msg => String(msg.channelId) === String(currentChannelId),
-  )
-
-  const handleSubmit = async (e) => {
-    e.preventDefault()
-
-    if (!text.trim()) return
-
-    setIsSending(true)
-
-    try {
-      await sendMessage({
-        body: text,
-        channelId: currentChannelId,
-        username,
-      })
-
-      setText('')
-    }
-    catch (err) {
-      console.error(err)
-    }
-    finally {
-      setIsSending(false)
-    }
-  }
-
   return (
-    <div className="d-flex flex-column h-100">
-      <Container className="h-100 my-4 overflow-hidden rounded shadow">
-        <Row className="h-100 bg-white">
-          <Col xs={4} md={3} className="border-end bg-light p-0 d-flex flex-column">
-            <div className="p-3 border-bottom">
-              <b>Каналы</b>
-            </div>
-            <ListGroup variant="flush">
-              {channels.map(ch => (
-                <ListGroup.Item
-                  key={ch.id}
-                  active={ch.id === currentChannelId}
-                  action
-                  onClick={() => dispatch(setCurrentChannelId(ch.id))}
-                >
-                  {ch.name}
-                </ListGroup.Item>
-              ))}
-            </ListGroup>
-          </Col>
-          <Col className="d-flex flex-column p-0">
-            <div className="border-bottom p-3">
-              <b>Сообщения</b>
-            </div>
-            <div className="flex-grow-1 overflow-auto p-3">
-              {filteredMessages.map(msg => (
-                <div key={msg.id} className="mb-2">
-                  <b>{msg.username}</b>
-                  {': '}
-                  {msg.body}
-                </div>
-              ))}
-            </div>
-            <div className="border-top p-3">
-              <Form onSubmit={handleSubmit} className="d-flex gap-2">
-                <Form.Control
-                  value={text}
-                  onChange={e => setText(e.target.value)}
-                  placeholder="Введите сообщение..."
-                />
-                <Button
-                  type="submit"
-                  disabled={isSending}
-                >
-                  Отправить
-                </Button>
-              </Form>
-            </div>
-          </Col>
-        </Row>
-      </Container>
+    <div className="h-100 bg-light">
+      <div className="h-100">
+        <div className="h-100" id="chat">
+          <div className="d-flex flex-column h-100">
+            <Container className="h-100 my-4 overflow-hidden rounded shadow">
+              <Row className="h-100 bg-white flex-md-row">
+                <Col xs={5} md={3} lg={3} className="border-end px-0 bg-light flex-column h-100 d-flex">
+                  <ChannelsList />
+                </Col>
+                <Col className="d-flex flex-column p-0 h-100">
+                  <MessagesHeader channelId={currentChannelId} />
+                  <MessagesList channelId={currentChannelId} />
+                  <MessageInput channelId={currentChannelId} />
+                </Col>
+              </Row>
+            </Container>
+          </div>
+        </div>
+      </div>
     </div>
   )
 }
