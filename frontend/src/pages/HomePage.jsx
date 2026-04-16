@@ -19,7 +19,7 @@ import {
   removeMessagesByChannel,
 } from '../store/slices/messagesSlice'
 
-import ChannelsList from '../components/parts/Channels/ChannelList'
+import ChannelsList from '../components/parts/channels/ChannelList'
 import MessagesHeader from '../components/parts/messages/MessagesHeader'
 import MessagesList from '../components/parts/messages/MessagesList'
 import MessageInput from '../components/parts/messages/MessageInput'
