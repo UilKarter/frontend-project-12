@@ -1,20 +1,20 @@
-import { useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { ListGroup, Button } from 'react-bootstrap'
 import { useTranslation } from 'react-i18next'
 
 import { channelsSelectors, setCurrentChannelId } from '../../../store/slices/channelsSlice'
+import { openModal } from '../../../store/slices/modalSlice'
 
 import BasicChannel from './BasicChannel'
 import CustomChannel from './CustomChannel'
-import AddChannelModal from './modals/AddChannelModal'
 
 const ChannelsList = () => {
   const { t } = useTranslation()
   const dispatch = useDispatch()
   const channels = useSelector(channelsSelectors.selectAll)
   const currentChannelId = useSelector(state => state.channels.currentChannelId)
-  const [showAddModal, setShowAddModal] = useState(false)
+
+  const handleAddChannel = () => dispatch(openModal({ type: 'add' }))
   const basicChannels = channels.filter(ch => !ch.removable)
   const customChannels = channels.filter(ch => ch.removable)
 
@@ -29,7 +29,8 @@ const ChannelsList = () => {
         <Button
           variant="outline-primary"
           size="sm"
-          onClick={() => setShowAddModal(true)}
+          onClick={handleAddChannel}
+          aria-label={t('home.channels.add')}
         >
           {t('home.channels.plus')}
         </Button>
@@ -44,7 +45,6 @@ const ChannelsList = () => {
               onClick={() => handleChannelClick(ch.id)}
             />
           ))}
-
           {customChannels.map(ch => (
             <CustomChannel
               key={ch.id}
@@ -55,7 +55,6 @@ const ChannelsList = () => {
           ))}
         </ListGroup>
       </div>
-      <AddChannelModal show={showAddModal} onHide={() => setShowAddModal(false)} />
     </div>
   )
 }

@@ -8,6 +8,7 @@ import LoginPage from './pages/LoginPage'
 import NotFoundPage from './pages/NotFoundPage'
 import SignupPage from './pages/SignupPage'
 import ProtectedRoute from './components/ProtectedRoute'
+import ModalRoot from './components/ModalRoot'
 
 const rollbarConfig = {
   accessToken: import.meta.env.VITE_ROLLBAR_ACCESS_TOKEN,
@@ -36,6 +37,7 @@ const App = () => {
             <Route path="*" element={<Navigate to="/404" replace />} />
           </Routes>
           <ToastContainer />
+          <ModalRoot />
         </SocketProvider>
       </ErrorBoundary>
     </RollbarProvider>
