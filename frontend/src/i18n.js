@@ -4,7 +4,7 @@ import resources from './locales/locales'
 
 const i18n = i18next.createInstance()
 
-i18n
+export const i18nPromise = i18n
   .use(initReactI18next)
   .init({
     fallbackLng: 'ru',
@@ -12,5 +12,6 @@ i18n
     debug: false,
     resources,
   })
+  .then(() => i18n)
 
 export default i18n
