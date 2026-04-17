@@ -23,7 +23,11 @@ const CustomChannel = ({ channel, isActive, onClick }) => {
             {channel.name}
           </Button>
 
-          <Dropdown.Toggle split variant={isActive ? 'secondary' : 'light'} />
+          <Dropdown.Toggle
+            split
+            variant={isActive ? 'secondary' : 'light'}
+            aria-label={t('home.channels.dropdownToggle')}
+          />
 
           <Dropdown.Menu
             renderMenuOnMount

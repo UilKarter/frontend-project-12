@@ -53,6 +53,8 @@ const AddChannelModal = ({ show, onHide }) => {
             <Form.Control
               name="name"
               ref={inputRef}
+              placeholder={t('home.channels.modals.nameLabel')}
+              aria-label={t('home.channels.modals.nameLabel')}
               value={formik.values.name}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
