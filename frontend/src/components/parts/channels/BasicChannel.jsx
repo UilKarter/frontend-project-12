@@ -9,6 +9,7 @@ const BasicChannel = ({ channel, isActive, onClick }) => {
         className="w-100 rounded-0 text-start text-truncate"
         variant={isActive ? 'secondary' : 'light'}
         onClick={onClick}
+        aria-label={channel.name}
       >
         <span className="me-1">{t('home.channels.hash')}</span>
         {channel.name}

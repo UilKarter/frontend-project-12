@@ -15,9 +15,10 @@ const CustomChannel = ({ channel, isActive, onClick }) => {
       <li className="nav-item w-100">
         <Dropdown as={ButtonGroup} className="d-flex w-100">
           <Button
-            className="w-100 text-start text-truncate rounded-0"
+            className="w-100 rounded-0 text-start text-truncate"
             variant={isActive ? 'secondary' : 'light'}
             onClick={onClick}
+            aria-label={channel.name}
           >
             <span className="me-1">{t('home.channels.hash')}</span>
             {channel.name}
