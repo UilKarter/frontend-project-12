@@ -27,14 +27,18 @@ const CustomChannel = ({ channel, isActive, onClick }) => {
           split
           variant={isActive ? 'secondary' : 'light'}
           aria-label={t('home.channels.dropdownToggle')}
-        />
+        >
+          <span className="visually-hidden">{t('home.channels.dropdownToggle')}</span>
+        </Dropdown.Toggle>
 
         <Dropdown.Menu renderMenuOnMount>
           <Dropdown.Item onClick={handleRename}>
             {t('home.channels.dropdownRename')}
+            <span className="visually-hidden">{t('home.channels.dropdownRename')}</span>
           </Dropdown.Item>
           <Dropdown.Item className="text-danger" onClick={handleRemove}>
             {t('home.channels.dropdownRemove')}
+            <span className="visually-hidden">{t('home.channels.dropdownRemove')}</span>
           </Dropdown.Item>
         </Dropdown.Menu>
       </Dropdown>
