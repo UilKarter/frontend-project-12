@@ -1,26 +1,27 @@
 import { Navbar, Container, Button } from 'react-bootstrap'
 import { Link, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
+import { isAuthenticated, clearAuth } from '../../utils/auth'
 
 const Header = () => {
   const { t } = useTranslation()
   const navigate = useNavigate()
-  const token = localStorage.getItem('token')
-  const isAuthenticated = !!token
+  const authenticated = isAuthenticated()
 
   const handleLogout = () => {
-    localStorage.removeItem('token')
-    localStorage.removeItem('username')
+    clearAuth()
     navigate('/login')
   }
 
-  const homeLink = isAuthenticated ? '/' : '/login'
+  const homeLink = authenticated ? '/' : '/login'
 
   return (
     <Navbar bg="white" className="border-bottom">
       <Container>
-        <Navbar.Brand as={Link} to={homeLink}>{t('header.brand')}</Navbar.Brand>
-        {isAuthenticated && (
+        <Navbar.Brand as={Link} to={homeLink}>
+          {t('header.brand')}
+        </Navbar.Brand>
+        {authenticated && (
           <Button variant="outline-secondary" onClick={handleLogout}>
             {t('header.logoutButton')}
           </Button>

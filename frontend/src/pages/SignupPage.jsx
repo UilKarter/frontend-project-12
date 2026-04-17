@@ -75,7 +75,7 @@ const SignupPage = () => {
                       name="password"
                       type="password"
                       placeholder={t('auth.passRequirment')}
-                      autoComplete="off"
+                      autoComplete="new-password"
                       onBlur={formik.handleBlur}
                       onChange={formik.handleChange}
                       value={formik.values.password}
@@ -92,7 +92,7 @@ const SignupPage = () => {
                       name="confirmPassword"
                       type="password"
                       placeholder={t('auth.confirmRequirment')}
-                      autoComplete="off"
+                      autoComplete="new-password"
                       onBlur={formik.handleBlur}
                       onChange={formik.handleChange}
                       value={formik.values.confirmPassword}

@@ -1,15 +1,26 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect, useLayoutEffect } from 'react'
 import { Form, Button } from 'react-bootstrap'
 import { useTranslation } from 'react-i18next'
 import sendMessage from '../../../api/sendMessage'
 import filter from '../../../utils/profanityFilter'
+import { getUsername } from '../../../utils/auth'
 
 const MessageInput = ({ channelId }) => {
   const { t } = useTranslation()
   const [text, setText] = useState('')
   const [isSending, setIsSending] = useState(false)
   const inputRef = useRef(null)
-  const username = localStorage.getItem('username')
+  const username = getUsername()
+
+  useEffect(() => {
+    inputRef.current?.focus()
+  }, [channelId])
+
+  useLayoutEffect(() => {
+    if (!isSending) {
+      inputRef.current?.focus()
+    }
+  }, [isSending])
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -26,16 +37,12 @@ const MessageInput = ({ channelId }) => {
         username,
       })
       setText('')
-      setTimeout(() => inputRef.current?.focus(), 0)
     }
     catch (err) {
       console.error(t('home.messages.submitError'), err)
     }
     finally {
       setIsSending(false)
-      setTimeout(() => {
-        inputRef.current?.focus()
-      }, 10)
     }
   }
 
@@ -48,6 +55,7 @@ const MessageInput = ({ channelId }) => {
           onChange={e => setText(e.target.value)}
           placeholder={t('home.messages.inputAwait')}
           disabled={isSending}
+          autoComplete="off"
         />
         <Button type="submit" disabled={isSending}>
           {t('home.messages.submitButton')}

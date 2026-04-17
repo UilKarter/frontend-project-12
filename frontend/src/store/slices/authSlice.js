@@ -1,7 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit'
+import { getToken, setToken, removeToken } from '../../utils/auth'
 
 const initialState = {
-  token: localStorage.getItem('token') || null,
+  token: getToken() || null,
   isLoading: false,
   error: null,
 }
@@ -21,7 +22,7 @@ const authSlice = createSlice({
       state.token = token
       state.error = null
 
-      localStorage.setItem('token', token)
+      setToken(token)
     },
     loginFailure: (state, action) => {
       state.isLoading = false
@@ -32,7 +33,7 @@ const authSlice = createSlice({
       state.isLoading = false
       state.error = null
 
-      localStorage.removeItem('token')
+      removeToken()
     },
     clearError: (state) => {
       state.error = null

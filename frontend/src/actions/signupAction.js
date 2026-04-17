@@ -1,6 +1,7 @@
 import { toast } from 'react-toastify'
 import signupReq from '../api/signupReq'
 import { loginStart, loginSuccess, loginFailure } from '../store/slices/authSlice'
+import { setToken, setUsername } from '../utils/auth'
 
 const signupAction = async (navigate, dispatch, values, { setFieldError }, t) => {
   dispatch(loginStart())
@@ -8,8 +9,8 @@ const signupAction = async (navigate, dispatch, values, { setFieldError }, t) =>
   try {
     const { token, username } = await signupReq(values)
 
-    localStorage.setItem('token', token)
-    localStorage.setItem('username', username)
+    setToken(token)
+    setUsername(username)
 
     dispatch(loginSuccess({ token, username }))
     navigate('/')

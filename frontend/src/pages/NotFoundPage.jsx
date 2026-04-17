@@ -2,13 +2,12 @@ import { Container, Button } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 import { ExclamationTriangle } from 'react-bootstrap-icons'
 import { useTranslation } from 'react-i18next'
-
 import Header from '../components/parts/Header'
+import { isAuthenticated } from '../utils/auth'
 
 const NotFoundPage = () => {
   const { t } = useTranslation()
-  const token = localStorage.getItem('token')
-  const homeLink = token ? '/' : '/login'
+  const homeLink = isAuthenticated() ? '/' : '/login'
 
   return (
     <div className="d-flex flex-column h-100">

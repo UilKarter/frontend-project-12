@@ -29,4 +29,4 @@ clean:
 test-start:
 	rm -rf frontend/dist
 	npm run build
-	npx serve -s frontend/dist -l 5001
+	npx start-server -s ./frontend/dist
