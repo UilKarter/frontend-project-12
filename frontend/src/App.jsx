@@ -1,5 +1,6 @@
 import { Routes, Route, Navigate } from 'react-router-dom'
 import { ToastContainer } from 'react-toastify'
+import { Provider as RollbarProvider, ErrorBoundary } from '@rollbar/react'
 
 import HomePage from './pages/HomePage'
 import LoginPage from './pages/LoginPage'
@@ -7,26 +8,34 @@ import NotFoundPage from './pages/NotFoundPage'
 import SignupPage from './pages/SignupPage'
 import ProtectedRoute from './components/ProtectedRoute'
 
+const rollbarConfig = {
+  accessToken: import.meta.env.VITE_ROLLBAR_ACCESS_TOKEN,
+  environment: import.meta.env.MODE,
+  captureUncaught: true,
+  captureUnhandledRejections: true,
+}
+
 const App = () => {
   return (
-    <>
-      <Routes>
-        <Route
-          path="/"
-          element={(
-            <ProtectedRoute>
-              <HomePage />
-            </ProtectedRoute>
-          )}
-        />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/404" element={<NotFoundPage />} />
-        <Route path="/signup" element={<SignupPage />} />
-        <Route path="*" element={<Navigate to="/404" replace />} />
-      </Routes>
-
-      <ToastContainer />
-    </>
+    <RollbarProvider config={rollbarConfig}>
+      <ErrorBoundary>
+        <Routes>
+          <Route
+            path="/"
+            element={(
+              <ProtectedRoute>
+                <HomePage />
+              </ProtectedRoute>
+            )}
+          />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/signup" element={<SignupPage />} />
+          <Route path="/404" element={<NotFoundPage />} />
+          <Route path="*" element={<Navigate to="/404" replace />} />
+        </Routes>
+        <ToastContainer />
+      </ErrorBoundary>
+    </RollbarProvider>
   )
 }
 
