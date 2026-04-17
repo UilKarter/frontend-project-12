@@ -4,10 +4,9 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "lint": "eslint .",
-    "preview": "vite preview"
+    "build": "npm run build --prefix frontend",
+    "start": "npx start-server -p $PORT -s ./frontend/dist",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.11.2",
