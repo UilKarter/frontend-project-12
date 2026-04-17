@@ -56,6 +56,7 @@ const MessageInput = ({ channelId }) => {
           placeholder={t('home.messages.inputAwait')}
           disabled={isSending}
           autoComplete="off"
+          aria-label={t('home.messages.newMessage')}
         />
         <Button type="submit" disabled={isSending}>
           {t('home.messages.submitButton')}

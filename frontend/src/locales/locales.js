@@ -36,6 +36,7 @@ export default {
           submitButton: 'Отправить',
           submitError: 'Ошибка отправки сообщения: ',
           loadError: 'Не удалось загрузить сообщения.',
+          newMessage: 'Новое сообщение',
         },
       },
       auth: {
