@@ -43,8 +43,7 @@ const RenameChannelModal = ({ channel, show, onHide }) => {
         inputRef.current?.select()
       }, 0)
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [show])
+  }, [show, formik, channel.name])
 
   return (
     <Modal show={show} onHide={onHide} centered>

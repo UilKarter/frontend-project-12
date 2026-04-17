@@ -41,8 +41,7 @@ const AddChannelModal = ({ show, onHide }) => {
       formik.setSubmitting(false)
       setTimeout(() => inputRef.current?.focus(), 0)
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [show])
+  }, [show, formik])
 
   return (
     <Modal show={show} onHide={onHide} centered>
