@@ -29,7 +29,7 @@ const HomePage = () => {
   const [isLoading, setIsLoading] = useState(!Object.keys(channels).length)
 
   useEffect(() => {
-    if (!isLoading) return // данные уже есть
+    if (!isLoading) return
 
     const fetchData = async () => {
       try {

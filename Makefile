@@ -1,30 +1,25 @@
-.PHONY: install build start
+.PHONY: install build start develop lint
 
-install-root:
+install:
 	npm ci
 
-install-frontend:
-	cd frontend && npm ci --legacy-peer-deps
-
-install: install-root install-frontend
-
 build:
-	cd frontend && npm run build
+	rm -rf frontend/dist && cd frontend && npm run build && cd ..
 
-dev:
-	cd frontend && npm run dev
+start-frontend:
+	make -C frontend start
+
+start-backend:
+	npx start-server -p 5001 -s ./frontend/dist
 
 start:
-	npx serve -s frontend/dist -l 5001
+	make start-backend
 
-preview:
-	cd frontend && npm run preview
+develop:
+	make start-backend & make start-frontend
 
 lint:
-	cd frontend && npx eslint --no-config-lookup --config eslint.config.js . --fix
-
-clean:
-	rm -rf frontend/dist
+	cd frontend && npm run lint
 
 test-start:
 	rm -rf frontend/dist

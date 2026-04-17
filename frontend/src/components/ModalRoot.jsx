@@ -1,4 +1,3 @@
-// components/ModalRoot.jsx
 import { useDispatch, useSelector } from 'react-redux'
 import { closeModal } from '../store/slices/modalSlice'
 import AddChannelModal from './parts/channels/modals/AddChannelModal'
