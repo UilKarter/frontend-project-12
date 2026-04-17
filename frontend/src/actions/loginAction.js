@@ -1,5 +1,4 @@
 import loginReq from '../api/loginReq'
-import { toast } from 'react-toastify'
 import {
   loginStart,
   loginSuccess,
@@ -39,7 +38,6 @@ const loginAction = async (navigate, dispatch, values, t) => {
     }
     catch (err) {
       console.error(t('home.channels.loadError'), err)
-      toast.error(t('home.messages.loadError'))
     }
 
     navigate('/')
@@ -49,7 +47,6 @@ const loginAction = async (navigate, dispatch, values, t) => {
       ? t('auth.errors.wrongLogin')
       : t('auth.errors.serverError')
     dispatch(loginFailure(message))
-    toast.error(message)
   }
 }
 
