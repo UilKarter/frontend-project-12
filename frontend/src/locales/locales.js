@@ -62,6 +62,7 @@ export default {
         notOneOf: 'Канал уже существует',
         required: 'Обязательное поле',
         error: 'Ошибка создания схемы валидации:',
+        profanity: 'Недопустимые слова',
       },
       notFound: {
         nfError: '404',
@@ -142,6 +143,7 @@ export default {
         notOneOf: 'Channel already exists',
         required: 'Required field',
         error: 'Validation schema error:',
+        profanity: 'Inappropriate words',
       },
       notFound: {
         nfError: '404',

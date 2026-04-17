@@ -2,6 +2,7 @@ import { useState, useRef } from 'react'
 import { Form, Button } from 'react-bootstrap'
 import { useTranslation } from 'react-i18next'
 import sendMessage from '../../../api/sendMessage'
+import filter from '../../../utils/profanityFilter'
 
 const MessageInput = ({ channelId }) => {
   const { t } = useTranslation()
@@ -15,10 +16,12 @@ const MessageInput = ({ channelId }) => {
     const trimmed = text.trim()
     if (!trimmed) return
 
+    const cleanedMessage = filter.clean(trimmed)
+
     setIsSending(true)
     try {
       await sendMessage({
-        body: trimmed,
+        body: cleanedMessage,
         channelId,
         username,
       })

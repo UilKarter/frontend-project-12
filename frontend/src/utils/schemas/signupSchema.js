@@ -1,4 +1,5 @@
 import * as yup from 'yup'
+import filter from '../profanityFilter'
 
 const signupSchema = (t) => {
   return yup.object().shape({
@@ -6,7 +7,8 @@ const signupSchema = (t) => {
       .string()
       .min(3, t('schemas.minmax'))
       .max(20, t('schemas.minmax'))
-      .required(t('schemas.required')),
+      .required(t('schemas.required'))
+      .test('no-profanity', t('schemas.profanity'), value => !filter.check(value)),
     password: yup
       .string()
       .min(6, t('schemas.min'))

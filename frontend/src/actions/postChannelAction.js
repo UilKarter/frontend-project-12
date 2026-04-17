@@ -1,10 +1,12 @@
 import { toast } from 'react-toastify'
 import postChannel from '../api/postChannel'
 import { addChannel, setCurrentChannelId } from '../store/slices/channelsSlice'
+import filter from '../utils/profanityFilter'
 
 const postChannelAction = async (closeModal, dispatch, values, { resetForm }, t) => {
   try {
-    const newChannel = await postChannel(values.name)
+    const cleanedName = filter.clean(values.name)
+    const newChannel = await postChannel(cleanedName)
 
     dispatch(addChannel(newChannel))
     dispatch(setCurrentChannelId(newChannel.id))
