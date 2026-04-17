@@ -67,7 +67,7 @@ const SignupPage = () => {
                         && !!formik.errors.username
                       }
                     />
-                    <Form.Label>{t('auth.loginLabel')}</Form.Label>
+                    <Form.Label>{t('auth.signupLogin')}</Form.Label>
                     <Form.Control.Feedback type="invalid">
                       {formik.errors.username}
                     </Form.Control.Feedback>
