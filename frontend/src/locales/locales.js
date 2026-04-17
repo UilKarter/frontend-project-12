@@ -32,6 +32,7 @@ export default {
           inputAwait: 'Введите сообщение...',
           submitButton: 'Отправить',
           submitError: 'Ошибка отправки сообщения: ',
+          loadError: 'Не удалось загрузить данные. Проверьте соединение.',
         },
       },
       auth: {
@@ -72,6 +73,10 @@ export default {
         brand: 'Hexlet Chat',
         logoutButton: 'Выйти',
       },
+      socket: {
+        connectError: 'Ошибка соединения с сервером.',
+        disconnect: 'Соединение с сервером потеряно.',
+      },
     },
   },
   en: {
@@ -107,6 +112,7 @@ export default {
           inputAwait: 'Enter a message...',
           submitButton: 'Send',
           submitError: 'Message send error: ',
+          loadError: 'Failed to load data. Check your connection.',
         },
       },
       auth: {
@@ -146,6 +152,10 @@ export default {
       header: {
         brand: 'Hexlet Chat',
         logoutButton: 'Log out',
+      },
+      socket: {
+        connectError: 'Server connection error.',
+        disconnect: 'Connection to server lost.',
       },
     },
   },

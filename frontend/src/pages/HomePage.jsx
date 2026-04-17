@@ -1,6 +1,8 @@
+import { toast } from 'react-toastify'
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Container, Row, Col } from 'react-bootstrap'
+import { useTranslation } from 'react-i18next'
 
 import getChannels from '../api/getChannels'
 import getMessages from '../api/getMessages'
@@ -26,22 +28,42 @@ import MessagesList from '../components/parts/messages/MessagesList'
 import MessageInput from '../components/parts/messages/MessageInput'
 
 const HomePage = () => {
+  const { t } = useTranslation()
   const dispatch = useDispatch()
   const currentChannelId = useSelector(state => state.channels.currentChannelId)
 
   useEffect(() => {
     const fetchData = async () => {
-      const [channelsData, messagesData] = await Promise.all([
-        getChannels(),
-        getMessages(),
-      ])
-      dispatch(setChannels(channelsData))
-      dispatch(setMessages(messagesData))
-      const general = channelsData.find(c => c.name === 'general')
-      dispatch(setCurrentChannelId(general?.id || channelsData[0]?.id))
+      try {
+        const [channelsData, messagesData] = await Promise.all([
+          getChannels(),
+          getMessages(),
+        ])
+        dispatch(setChannels(channelsData))
+        dispatch(setMessages(messagesData))
+        const general = channelsData.find(c => c.name === 'general')
+        dispatch(setCurrentChannelId(general?.id || channelsData[0]?.id))
+      }
+      catch (err) {
+        console.error(err)
+        toast.error(t('home.messages.loadError'))
+      }
     }
     fetchData()
-  }, [dispatch])
+  }, [dispatch, t])
+
+  useEffect(() => {
+    const onConnectError = () => toast.error(t('socket.connectError'))
+    const onDisconnect = () => toast.warning(t('socket.disconnect'))
+
+    socket.on('connect_error', onConnectError)
+    socket.on('disconnect', onDisconnect)
+
+    return () => {
+      socket.off('connect_error', onConnectError)
+      socket.off('disconnect', onDisconnect)
+    }
+  }, [t])
 
   useEffect(() => {
     const handleNewMessage = payload => dispatch(postMessage(payload))
