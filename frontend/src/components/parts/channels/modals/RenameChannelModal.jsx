@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useRef } from 'react'
 import { useSelector } from 'react-redux'
 import { useFormik } from 'formik'
 import { Modal, Button, Form } from 'react-bootstrap'
@@ -7,7 +7,6 @@ import { useTranslation } from 'react-i18next'
 import renameChannelAction from '../../../../actions/renameChannelAction'
 import renameChannelSchema from '../../../../utils/schemas/renameChannelSchema'
 import { channelsSelectors } from '../../../../store/slices/channelsSlice'
-import filter from '../../../../utils/profanityFilter'
 
 const RenameChannelModal = ({ channel, show, onHide }) => {
   const { t } = useTranslation()
@@ -21,8 +20,7 @@ const RenameChannelModal = ({ channel, show, onHide }) => {
     validationSchema: renameChannelSchema(channelNames, channel.name, t),
     onSubmit: async (values, helpers) => {
       try {
-        const cleanedName = filter.clean(values.name)
-        await renameChannelAction(channel.id, cleanedName, t)
+        await renameChannelAction(channel.id, values.name, t)
         onHide()
       }
       catch (e) {
@@ -34,43 +32,40 @@ const RenameChannelModal = ({ channel, show, onHide }) => {
     },
   })
 
-  useEffect(() => {
-    if (show) {
-      formik.resetForm({ values: { name: channel.name } })
-      formik.setSubmitting(false)
-      setTimeout(() => {
-        inputRef.current?.focus()
-        inputRef.current?.select()
-      }, 0)
-    }
-  }, [show, formik, channel.name])
+  const handleEnter = () => {
+    formik.resetForm({ values: { name: channel.name } })
+    formik.setSubmitting(false)
+    setTimeout(() => {
+      inputRef.current?.focus()
+      inputRef.current?.select()
+    }, 0)
+  }
 
   return (
-    <Modal show={show} onHide={onHide} centered>
+    <Modal show={show} onHide={onHide} centered onEnter={handleEnter}>
       <Modal.Header closeButton>
         <Modal.Title>{t('home.channels.modals.renameTitle')}</Modal.Title>
       </Modal.Header>
       <Form onSubmit={formik.handleSubmit}>
         <Modal.Body>
-          <Form.Group controlId="name" className="mb-3">
-            <Form.Label className="visually-hidden">{t('home.channels.modals.nameLabel')}</Form.Label>
-            <Form.Control
-              name="name"
-              ref={inputRef}
-              placeholder={t('home.channels.modals.nameLabel')}
-              aria-label={t('home.channels.modals.nameLabel')}
-              value={formik.values.name}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              autoComplete="off"
-              isInvalid={
-                (formik.touched.name || formik.submitCount > 0) && !!formik.errors.name
-              }
-            />
-            <Form.Control.Feedback type="invalid">
-              {formik.errors.name}
-            </Form.Control.Feedback>
-          </Form.Group>
+          <Form.Label className="visually-hidden">{t('home.channels.modals.nameLabel')}</Form.Label>
+          <Form.Control
+            name="name"
+            ref={inputRef}
+            placeholder={t('home.channels.modals.nameLabel')}
+            aria-label={t('home.channels.modals.nameLabel')}
+            value={formik.values.name}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            autoComplete="off"
+            isInvalid={
+              (formik.touched.name || formik.submitCount > 0)
+              && !!formik.errors.name
+            }
+          />
+          <Form.Control.Feedback type="invalid">
+            {formik.errors.name}
+          </Form.Control.Feedback>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={onHide}>

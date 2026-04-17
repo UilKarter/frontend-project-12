@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useFormik } from 'formik'
 import { Modal, Button, Form } from 'react-bootstrap'
@@ -7,7 +7,6 @@ import { useTranslation } from 'react-i18next'
 import postChannelAction from '../../../../actions/postChannelAction'
 import { channelsSelectors } from '../../../../store/slices/channelsSlice'
 import postChannelSchema from '../../../../utils/schemas/postChannelSchema'
-import filter from '../../../../utils/profanityFilter'
 
 const AddChannelModal = ({ show, onHide }) => {
   const { t } = useTranslation()
@@ -23,8 +22,7 @@ const AddChannelModal = ({ show, onHide }) => {
     enableReinitialize: true,
     onSubmit: async (values, helpers) => {
       try {
-        const cleanedName = filter.clean(values.name)
-        await postChannelAction(() => onHide(), dispatch, { name: cleanedName }, helpers, t)
+        await postChannelAction(() => onHide(), dispatch, values, helpers, t)
       }
       catch (e) {
         console.error(e)
@@ -35,16 +33,14 @@ const AddChannelModal = ({ show, onHide }) => {
     },
   })
 
-  useEffect(() => {
-    if (show) {
-      formik.resetForm()
-      formik.setSubmitting(false)
-      setTimeout(() => inputRef.current?.focus(), 0)
-    }
-  }, [show, formik])
+  const handleEnter = () => {
+    formik.resetForm()
+    formik.setSubmitting(false)
+    setTimeout(() => inputRef.current?.focus(), 0)
+  }
 
   return (
-    <Modal show={show} onHide={onHide} centered>
+    <Modal show={show} onHide={onHide} centered onEnter={handleEnter}>
       <Modal.Header closeButton>
         <Modal.Title>{t('home.channels.modals.postTitle')}</Modal.Title>
       </Modal.Header>
@@ -62,7 +58,8 @@ const AddChannelModal = ({ show, onHide }) => {
               onBlur={formik.handleBlur}
               autoComplete="off"
               isInvalid={
-                (formik.touched.name || formik.submitCount > 0) && !!formik.errors.name
+                (formik.touched.name || formik.submitCount > 0)
+                && !!formik.errors.name
               }
             />
             <Form.Control.Feedback type="invalid">
