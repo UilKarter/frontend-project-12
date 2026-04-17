@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next'
 import renameChannelAction from '../../../../actions/renameChannelAction'
 import renameChannelSchema from '../../../../utils/schemas/renameChannelSchema'
 import { channelsSelectors } from '../../../../store/slices/channelsSlice'
+import filter from '../../../../utils/profanityFilter'
 
 const RenameChannelModal = ({ channel, show, onHide }) => {
   const { t } = useTranslation()
@@ -20,7 +21,8 @@ const RenameChannelModal = ({ channel, show, onHide }) => {
     validationSchema: renameChannelSchema(channelNames, channel.name, t),
     onSubmit: async (values, helpers) => {
       try {
-        await renameChannelAction(channel.id, values.name, t)
+        const cleanedName = filter.clean(values.name)
+        await renameChannelAction(channel.id, cleanedName, t)
         onHide()
       }
       catch (e) {

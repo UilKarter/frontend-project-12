@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next'
 import postChannelAction from '../../../../actions/postChannelAction'
 import { channelsSelectors } from '../../../../store/slices/channelsSlice'
 import postChannelSchema from '../../../../utils/schemas/postChannelSchema'
+import filter from '../../../../utils/profanityFilter'
 
 const AddChannelModal = ({ show, onHide }) => {
   const { t } = useTranslation()
@@ -22,7 +23,8 @@ const AddChannelModal = ({ show, onHide }) => {
     enableReinitialize: true,
     onSubmit: async (values, helpers) => {
       try {
-        await postChannelAction(() => onHide(), dispatch, values, helpers, t)
+        const cleanedName = filter.clean(values.name)
+        await postChannelAction(() => onHide(), dispatch, { name: cleanedName }, helpers, t)
       }
       catch (e) {
         console.error(e)
