@@ -62,7 +62,9 @@ const LoginPage = () => {
                     <Form.Label>{t('auth.passLabel')}</Form.Label>
                   </Form.Group>
 
-                  {error && <div className="text-danger mb-3">{error}</div>}
+                  {error && formik.submitCount > 0 && (
+                    <div className="text-danger mb-3">{error}</div>
+                  )}
 
                   <Button
                     type="submit"

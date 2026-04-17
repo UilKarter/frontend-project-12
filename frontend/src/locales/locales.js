@@ -41,7 +41,7 @@ export default {
       auth: {
         errors: {
           noToken: 'Нет токена в ответе',
-          wrongLogin: 'Неверное имя пользователя или пароль',
+          wrongLogin: 'Неверные имя пользователя или пароль',
           serverError: 'Ошибка соединения',
           alreadyCreated: 'Такой пользователь уже существует',
         },
