@@ -2,6 +2,7 @@ import { Routes, Route, Navigate } from 'react-router-dom'
 import { ToastContainer } from 'react-toastify'
 import { Provider as RollbarProvider, ErrorBoundary } from '@rollbar/react'
 
+import { SocketProvider } from './contexts/SocketProvider'
 import HomePage from './pages/HomePage'
 import LoginPage from './pages/LoginPage'
 import NotFoundPage from './pages/NotFoundPage'
@@ -19,21 +20,23 @@ const App = () => {
   return (
     <RollbarProvider config={rollbarConfig}>
       <ErrorBoundary>
-        <Routes>
-          <Route
-            path="/"
-            element={(
-              <ProtectedRoute>
-                <HomePage />
-              </ProtectedRoute>
-            )}
-          />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/signup" element={<SignupPage />} />
-          <Route path="/404" element={<NotFoundPage />} />
-          <Route path="*" element={<Navigate to="/404" replace />} />
-        </Routes>
-        <ToastContainer />
+        <SocketProvider>
+          <Routes>
+            <Route
+              path="/"
+              element={(
+                <ProtectedRoute>
+                  <HomePage />
+                </ProtectedRoute>
+              )}
+            />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/signup" element={<SignupPage />} />
+            <Route path="/404" element={<NotFoundPage />} />
+            <Route path="*" element={<Navigate to="/404" replace />} />
+          </Routes>
+          <ToastContainer />
+        </SocketProvider>
       </ErrorBoundary>
     </RollbarProvider>
   )
