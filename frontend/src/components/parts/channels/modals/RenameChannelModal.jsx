@@ -51,22 +51,25 @@ const RenameChannelModal = ({ channel, show, onHide }) => {
       </Modal.Header>
       <Form onSubmit={formik.handleSubmit}>
         <Modal.Body>
-          <Form.Control
-            name="name"
-            ref={inputRef}
-            placeholder={t('home.channels.modals.nameLabel')}
-            aria-label={t('home.channels.modals.nameLabel')}
-            value={formik.values.name}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            autoComplete="off"
-            isInvalid={
-              (formik.touched.name || formik.submitCount > 0) && !!formik.errors.name
-            }
-          />
-          <Form.Control.Feedback type="invalid">
-            {formik.errors.name}
-          </Form.Control.Feedback>
+          <Form.Group controlId="name" className="mb-3">
+            <Form.Label className="visually-hidden">{t('home.channels.modals.nameLabel')}</Form.Label>
+            <Form.Control
+              name="name"
+              ref={inputRef}
+              placeholder={t('home.channels.modals.nameLabel')}
+              aria-label={t('home.channels.modals.nameLabel')}
+              value={formik.values.name}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              autoComplete="off"
+              isInvalid={
+                (formik.touched.name || formik.submitCount > 0) && !!formik.errors.name
+              }
+            />
+            <Form.Control.Feedback type="invalid">
+              {formik.errors.name}
+            </Form.Control.Feedback>
+          </Form.Group>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={onHide}>
