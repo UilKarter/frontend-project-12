@@ -1,23 +1,16 @@
-import loginReq from '../api/loginReq.js'
 import { toast } from 'react-toastify'
-import {
-  loginStart,
-  loginSuccess,
-  loginFailure,
-} from '../store/slices/authSlice.js'
+import loginReq from '../api/loginReq'
+import { loginStart, loginSuccess, loginFailure } from '../store/slices/authSlice'
 
-const loginAction = async (navigate, dispatch, values) => {
+const loginAction = async (navigate, dispatch, values, t) => {
   dispatch(loginStart())
 
   try {
     const data = await loginReq(values)
-
     const { token } = data
     const { username } = values
 
-    if (!token) {
-      throw new Error('Нет токена в ответе')
-    }
+    if (!token) throw new Error(t('auth.errors.noToken'))
 
     localStorage.setItem('token', token)
     localStorage.setItem('username', username)
@@ -28,8 +21,8 @@ const loginAction = async (navigate, dispatch, values) => {
   catch (error) {
     const message
       = error.response?.status === 401
-        ? 'Неверное имя пользователя или пароль'
-        : 'Ошибка соединения с сервером'
+        ? t('auth.errors.wrongLogin')
+        : t('auth.errors.serverError')
 
     dispatch(loginFailure(message))
     toast.error(message)

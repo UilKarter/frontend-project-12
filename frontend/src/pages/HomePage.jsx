@@ -19,11 +19,11 @@ import {
   removeMessagesByChannel,
 } from '../store/slices/messagesSlice'
 
+import Header from '../components/parts/Header'
 import ChannelsList from '../components/parts/channels/ChannelList'
 import MessagesHeader from '../components/parts/messages/MessagesHeader'
 import MessagesList from '../components/parts/messages/MessagesList'
 import MessageInput from '../components/parts/messages/MessageInput'
-import Header from '../components/parts/Header'
 
 const HomePage = () => {
   const dispatch = useDispatch()
@@ -37,7 +37,6 @@ const HomePage = () => {
       ])
       dispatch(setChannels(channelsData))
       dispatch(setMessages(messagesData))
-
       const general = channelsData.find(c => c.name === 'general')
       dispatch(setCurrentChannelId(general?.id || channelsData[0]?.id))
     }
@@ -45,18 +44,9 @@ const HomePage = () => {
   }, [dispatch])
 
   useEffect(() => {
-    const handleNewMessage = (payload) => {
-      dispatch(postMessage(payload))
-    }
-
-    const handleNewChannel = (channel) => {
-      dispatch(addChannel(channel))
-    }
-
-    const handleRenameChannel = ({ id, name }) => {
-      dispatch(renameChannel({ id, changes: { name } }))
-    }
-
+    const handleNewMessage = payload => dispatch(postMessage(payload))
+    const handleNewChannel = channel => dispatch(addChannel(channel))
+    const handleRenameChannel = ({ id, name }) => dispatch(renameChannel({ id, changes: { name } }))
     const handleRemoveChannel = ({ id }) => {
       dispatch(removeChannel(id))
       dispatch(removeMessagesByChannel(id))

@@ -1,14 +1,14 @@
-import removeChannel from '../api/removeChannel'
 import { toast } from 'react-toastify'
+import removeChannel from '../api/removeChannel'
 
-const removeChannelAction = async (channelId) => {
+const removeChannelAction = async (channelId, t) => {
   try {
     await removeChannel(channelId)
-    toast.success('Канал удалён')
+    toast.success(t('home.channels.actions.removeSuccess'))
   }
   catch (e) {
     console.error(e)
-    toast.error('В ходе удаления возникла ошибка')
+    toast.error(t('home.channels.actions.removeError'))
   }
 }
 

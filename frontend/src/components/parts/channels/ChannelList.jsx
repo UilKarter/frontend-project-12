@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { ListGroup, Button } from 'react-bootstrap'
+import { useTranslation } from 'react-i18next'
 
 import { channelsSelectors, setCurrentChannelId } from '../../../store/slices/channelsSlice'
 
@@ -9,6 +10,7 @@ import CustomChannel from './CustomChannel'
 import AddChannelModal from './modals/AddChannelModal'
 
 const ChannelsList = () => {
+  const { t } = useTranslation()
   const dispatch = useDispatch()
   const channels = useSelector(channelsSelectors.selectAll)
   const currentChannelId = useSelector(state => state.channels.currentChannelId)
@@ -23,16 +25,13 @@ const ChannelsList = () => {
   return (
     <div className="d-flex flex-column h-100">
       <div className="d-flex justify-content-between align-items-center p-3 border-bottom">
-        <b>Каналы</b>
+        <b>{t('home.channels.header')}</b>
         <Button
           variant="outline-primary"
           size="sm"
-          onClick={() => {
-            console.log('Кнопка нажата, showAddModal =', showAddModal)
-            setShowAddModal(true)
-          }}
+          onClick={() => setShowAddModal(true)}
         >
-          +
+          {t('home.channels.plus')}
         </Button>
       </div>
       <div className="overflow-auto flex-grow-1">
@@ -56,7 +55,6 @@ const ChannelsList = () => {
           ))}
         </ListGroup>
       </div>
-      {console.log('Рендер ChannelsList, showAddModal =', showAddModal)}
       <AddChannelModal show={showAddModal} onHide={() => setShowAddModal(false)} />
     </div>
   )

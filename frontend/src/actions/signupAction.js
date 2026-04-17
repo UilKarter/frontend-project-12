@@ -2,7 +2,7 @@ import { toast } from 'react-toastify'
 import signupReq from '../api/signupReq'
 import { loginStart, loginSuccess, loginFailure } from '../store/slices/authSlice'
 
-const signupAction = async (navigate, dispatch, values, { setFieldError }) => {
+const signupAction = async (navigate, dispatch, values, { setFieldError }, t) => {
   dispatch(loginStart())
 
   try {
@@ -10,15 +10,16 @@ const signupAction = async (navigate, dispatch, values, { setFieldError }) => {
 
     localStorage.setItem('token', token)
     localStorage.setItem('username', username)
+
     dispatch(loginSuccess({ token, username }))
     navigate('/')
   }
   catch (error) {
     if (error.response?.status === 409) {
-      setFieldError('username', 'Пользователь уже существует')
+      setFieldError('username', t('auth.errors.alreadyCreated'))
     }
     else {
-      const message = 'Ошибка соединения с сервером'
+      const message = t('auth.errors.serverError')
       dispatch(loginFailure(message))
       toast.error(message)
     }

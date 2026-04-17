@@ -1,6 +1,8 @@
 import { Button } from 'react-bootstrap'
+import { useTranslation } from 'react-i18next'
 
 const BasicChannel = ({ channel, isActive, onClick }) => {
+  const { t } = useTranslation()
   return (
     <li className="nav-item w-100">
       <Button
@@ -8,7 +10,7 @@ const BasicChannel = ({ channel, isActive, onClick }) => {
         variant={isActive ? 'secondary' : 'light'}
         onClick={onClick}
       >
-        <span className="me-1">#</span>
+        <span className="me-1">{t('home.channels.hash')}</span>
         {channel.name}
       </Button>
     </li>

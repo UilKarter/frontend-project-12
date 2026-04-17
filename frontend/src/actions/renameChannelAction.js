@@ -1,14 +1,14 @@
 import { toast } from 'react-toastify'
 import renameChannel from '../api/renameChannel'
 
-const renameChannelAction = async (channelId, mame) => {
+const renameChannelAction = async (channelId, name, t) => {
   try {
-    await renameChannel(channelId, mame)
-    toast.success('Канал изменён')
+    await renameChannel(channelId, name)
+    toast.success(t('home.channels.actions.renameSuccess'))
   }
   catch (e) {
     console.error(e)
-    toast.error('Ошибка при изменении канала')
+    toast.error(t('home.channels.actions.renameError'))
   }
 }
 

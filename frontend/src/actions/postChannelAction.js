@@ -1,13 +1,8 @@
 import { toast } from 'react-toastify'
 import postChannel from '../api/postChannel'
-import { setCurrentChannelId, addChannel } from '../store/slices/channelsSlice'
+import { addChannel, setCurrentChannelId } from '../store/slices/channelsSlice'
 
-const postChannelAction = async (
-  closeModal,
-  dispatch,
-  values,
-  { resetForm },
-) => {
+const postChannelAction = async (closeModal, dispatch, values, { resetForm }, t) => {
   try {
     const newChannel = await postChannel(values.name)
 
@@ -17,11 +12,11 @@ const postChannelAction = async (
     resetForm()
     closeModal()
 
-    toast.success('Канал создан')
+    toast.success(t('home.channels.actions.createSuccess'))
   }
   catch (e) {
     console.error(e)
-    toast.error('В ходе создания канала возникла ошибка')
+    toast.error(t('home.channels.actions.createError'))
     throw e
   }
 }

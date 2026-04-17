@@ -1,8 +1,10 @@
 import { useState, useRef } from 'react'
 import { Form, Button } from 'react-bootstrap'
+import { useTranslation } from 'react-i18next'
 import sendMessage from '../../../api/sendMessage'
 
 const MessageInput = ({ channelId }) => {
+  const { t } = useTranslation()
   const [text, setText] = useState('')
   const [isSending, setIsSending] = useState(false)
   const inputRef = useRef(null)
@@ -24,7 +26,7 @@ const MessageInput = ({ channelId }) => {
       setTimeout(() => inputRef.current?.focus(), 0)
     }
     catch (err) {
-      console.error('Ошибка отправки сообщения:', err)
+      console.error(t('home.messages.submitError'), err)
     }
     finally {
       setIsSending(false)
@@ -41,11 +43,11 @@ const MessageInput = ({ channelId }) => {
           ref={inputRef}
           value={text}
           onChange={e => setText(e.target.value)}
-          placeholder="Введите сообщение..."
+          placeholder={t('home.messages.inputAwait')}
           disabled={isSending}
         />
         <Button type="submit" disabled={isSending}>
-          Отправить
+          {t('home.messages.submitButton')}
         </Button>
       </Form>
     </div>

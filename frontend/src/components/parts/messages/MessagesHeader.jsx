@@ -10,7 +10,7 @@ const MessagesHeader = ({ channelId }) => {
     <div className="border-bottom p-3 bg-white">
       <b>
         #
-        {channel?.name || 'Канал'}
+        {channel?.name || 'home.messages.emptyChName'}
       </b>
     </div>
   )

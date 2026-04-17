@@ -1,11 +1,14 @@
 import { useState } from 'react'
 import { Dropdown, ButtonGroup, Button } from 'react-bootstrap'
+import { useTranslation } from 'react-i18next'
+
 import RemoveChannelModal from './modals/RemoveChannelModal'
 import RenameChannelModal from './modals/RenameChannelModal'
 
 const CustomChannel = ({ channel, isActive, onClick }) => {
   const [isOpenRemove, setIsOpenRemove] = useState(false)
   const [isOpenRename, setIsOpenRename] = useState(false)
+  const { t } = useTranslation()
 
   return (
     <>
@@ -16,7 +19,7 @@ const CustomChannel = ({ channel, isActive, onClick }) => {
             variant={isActive ? 'secondary' : 'light'}
             onClick={onClick}
           >
-            <span className="me-1">#</span>
+            <span className="me-1">{t('home.channels.hash')}</span>
             {channel.name}
           </Button>
 
@@ -26,13 +29,13 @@ const CustomChannel = ({ channel, isActive, onClick }) => {
             renderMenuOnMount
           >
             <Dropdown.Item onClick={() => setIsOpenRename(true)}>
-              Переименовать
+              {t('home.channels.dropdownRename')}
             </Dropdown.Item>
             <Dropdown.Item
               className="text-danger"
               onClick={() => setIsOpenRemove(true)}
             >
-              Удалить
+              {t('home.channels.dropdownRemove')}
             </Dropdown.Item>
           </Dropdown.Menu>
         </Dropdown>
@@ -40,14 +43,13 @@ const CustomChannel = ({ channel, isActive, onClick }) => {
 
       <RemoveChannelModal
         channelId={channel.id}
-        isOpen={isOpenRemove}
-        setIsOpen={setIsOpenRemove}
+        show={isOpenRemove}
+        onHide={() => setIsOpenRemove(false)}
       />
-
       <RenameChannelModal
         channel={channel}
-        isOpen={isOpenRename}
-        setIsOpen={setIsOpenRename}
+        show={isOpenRename}
+        onHide={() => setIsOpenRename(false)}
       />
     </>
   )

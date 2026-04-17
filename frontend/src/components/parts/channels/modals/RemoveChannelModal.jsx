@@ -1,37 +1,39 @@
+import { useState } from 'react'
 import { Modal, Button } from 'react-bootstrap'
+import { useTranslation } from 'react-i18next'
 import removeChannelAction from '../../../../actions/removeChannelAction'
 
-const RemoveChannelModal = ({
-  channelId,
-  isOpen,
-  setIsOpen,
-}) => {
+const RemoveChannelModal = ({ channelId, show, onHide }) => {
+  const { t } = useTranslation()
+  const [isLoading, setIsLoading] = useState(false)
+
   const handleRemove = async () => {
-    await removeChannelAction(channelId)
-    setIsOpen(false)
+    setIsLoading(true)
+    try {
+      await removeChannelAction(channelId, t)
+      onHide()
+    }
+    catch (e) {
+      console.error(e)
+    }
+    finally {
+      setIsLoading(false)
+    }
   }
 
   return (
-    <Modal show={isOpen} onHide={() => setIsOpen(false)} centered>
+    <Modal show={show} onHide={onHide} centered>
       <Modal.Header closeButton>
-        <Modal.Title>Удалить канал</Modal.Title>
+        <Modal.Title>{t('home.channels.modals.removeTitle')}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <p className="lead">Вы уверены?</p>
+        <p className="lead">{t('home.channels.modals.removeConfirmation')}</p>
         <div className="d-flex justify-content-end">
-          <Button
-            variant="secondary"
-            className="me-2"
-            onClick={() => setIsOpen(false)}
-          >
-            Отмена
+          <Button variant="secondary" className="me-2" onClick={onHide}>
+            {t('home.channels.modals.cancelButton')}
           </Button>
-
-          <Button
-            variant="danger"
-            onClick={handleRemove}
-          >
-            Удалить
+          <Button variant="danger" onClick={handleRemove} disabled={isLoading}>
+            {isLoading ? '…' : t('home.channels.modals.removeButton')}
           </Button>
         </div>
       </Modal.Body>

@@ -2,12 +2,14 @@ import { useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useFormik } from 'formik'
 import { Modal, Button, Form } from 'react-bootstrap'
+import { useTranslation } from 'react-i18next'
 
 import postChannelAction from '../../../../actions/postChannelAction'
 import { channelsSelectors } from '../../../../store/slices/channelsSlice'
 import postChannelSchema from '../../../../utils/schemas/postChannelSchema'
 
 const AddChannelModal = ({ show, onHide }) => {
+  const { t } = useTranslation()
   const inputRef = useRef(null)
   const dispatch = useDispatch()
 
@@ -16,17 +18,11 @@ const AddChannelModal = ({ show, onHide }) => {
 
   const formik = useFormik({
     initialValues: { name: '' },
-    validationSchema: postChannelSchema(channelNames),
+    validationSchema: postChannelSchema(channelNames, t),
     enableReinitialize: true,
-
     onSubmit: async (values, helpers) => {
       try {
-        await postChannelAction(
-          () => onHide(),
-          dispatch,
-          values,
-          helpers,
-        )
+        await postChannelAction(() => onHide(), dispatch, values, helpers, t)
       }
       catch (e) {
         console.error(e)
@@ -49,9 +45,8 @@ const AddChannelModal = ({ show, onHide }) => {
   return (
     <Modal show={show} onHide={onHide} centered>
       <Modal.Header closeButton>
-        <Modal.Title>Добавить канал</Modal.Title>
+        <Modal.Title>{t('home.channels.modals.postTitle')}</Modal.Title>
       </Modal.Header>
-
       <Form onSubmit={formik.handleSubmit}>
         <Modal.Body>
           <Form.Group controlId="name" className="mb-3">
@@ -63,8 +58,7 @@ const AddChannelModal = ({ show, onHide }) => {
               onBlur={formik.handleBlur}
               autoComplete="off"
               isInvalid={
-                (formik.touched.name || formik.submitCount > 0)
-                && !!formik.errors.name
+                (formik.touched.name || formik.submitCount > 0) && !!formik.errors.name
               }
             />
             <Form.Control.Feedback type="invalid">
@@ -72,17 +66,12 @@ const AddChannelModal = ({ show, onHide }) => {
             </Form.Control.Feedback>
           </Form.Group>
         </Modal.Body>
-
         <Modal.Footer>
           <Button variant="secondary" onClick={onHide}>
-            Отмена
+            {t('home.channels.modals.cancelButton')}
           </Button>
-          <Button
-            type="submit"
-            variant="primary"
-            disabled={formik.isSubmitting}
-          >
-            Создать
+          <Button type="submit" variant="primary" disabled={formik.isSubmitting}>
+            {t('home.channels.modals.postButton')}
           </Button>
         </Modal.Footer>
       </Form>
