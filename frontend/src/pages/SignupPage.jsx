@@ -62,9 +62,12 @@ const SignupPage = () => {
                       onBlur={formik.handleBlur}
                       onChange={formik.handleChange}
                       value={formik.values.username}
-                      isInvalid={formik.touched.username && !!formik.errors.username}
+                      isInvalid={
+                        (formik.touched.username || formik.submitCount > 0)
+                        && !!formik.errors.username
+                      }
                     />
-                    <Form.Label>{t('auth.signupLogin')}</Form.Label>
+                    <Form.Label>{t('auth.loginLabel')}</Form.Label>
                     <Form.Control.Feedback type="invalid">
                       {formik.errors.username}
                     </Form.Control.Feedback>
@@ -79,7 +82,10 @@ const SignupPage = () => {
                       onBlur={formik.handleBlur}
                       onChange={formik.handleChange}
                       value={formik.values.password}
-                      isInvalid={formik.touched.password && !!formik.errors.password}
+                      isInvalid={
+                        (formik.touched.password || formik.submitCount > 0)
+                        && !!formik.errors.password
+                      }
                     />
                     <Form.Label>{t('auth.passLabel')}</Form.Label>
                     <Form.Control.Feedback type="invalid">
@@ -97,7 +103,8 @@ const SignupPage = () => {
                       onChange={formik.handleChange}
                       value={formik.values.confirmPassword}
                       isInvalid={
-                        formik.touched.confirmPassword && !!formik.errors.confirmPassword
+                        (formik.touched.confirmPassword || formik.submitCount > 0)
+                        && !!formik.errors.confirmPassword
                       }
                     />
                     <Form.Label>{t('auth.passConfirmLabel')}</Form.Label>

@@ -43,7 +43,7 @@ export default {
           noToken: 'Нет токена в ответе',
           wrongLogin: 'Неверное имя пользователя или пароль',
           serverError: 'Ошибка соединения',
-          alreadyCreated: 'Пользователь уже существует',
+          alreadyCreated: 'Такой пользователь уже существует',
         },
         login: 'Войти',
         loginLabel: 'Ваш ник',
