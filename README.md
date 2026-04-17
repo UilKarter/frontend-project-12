@@ -41,3 +41,9 @@ make build
 
 # Запуск сервера (бэкенд + статика)
 make start
+```
+---
+
+## Демо
+
+https://frontend-project-12-1v7h.onrender.com
