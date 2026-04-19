@@ -1,15 +1,19 @@
 import { useRef } from 'react'
 import { useSelector } from 'react-redux'
-import { useFormik } from 'formik'
-import { Modal, Button, Form } from 'react-bootstrap'
+import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
+import { Modal, Button, Form } from 'react-bootstrap'
+import { useFormik } from 'formik'
+import { toast } from 'react-toastify'
 
-import renameChannelAction from '../../../../actions/renameChannelAction'
+import useApi from '../../../../hooks/useApi'
 import renameChannelSchema from '../../../../utils/schemas/renameChannelSchema'
 import { channelsSelectors } from '../../../../store/slices/channelsSlice'
 
 const RenameChannelModal = ({ channel, show, onHide }) => {
   const { t } = useTranslation()
+  const navigate = useNavigate()
+  const api = useApi()
   const inputRef = useRef(null)
   const channels = useSelector(channelsSelectors.selectAll)
   const channelNames = channels.map(ch => ch.name)
@@ -20,11 +24,12 @@ const RenameChannelModal = ({ channel, show, onHide }) => {
     validationSchema: renameChannelSchema(channelNames, channel.name, t),
     onSubmit: async (values, helpers) => {
       try {
-        await renameChannelAction(channel.id, values.name, t)
+        await api.renameChannelAction(channel.id, values.name, t, navigate)
         onHide()
       }
       catch (e) {
-        console.error(e)
+        console.error('Error renaming channel', e)
+        toast.error(t('home.channels.actions.renameError'))
       }
       finally {
         helpers.setSubmitting(false)

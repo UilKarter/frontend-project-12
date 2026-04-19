@@ -1,4 +1,5 @@
 import loginReq from '../api/loginReq'
+import appRoutes from '../routes/appRoutes'
 import {
   loginStart,
   loginSuccess,
@@ -24,25 +25,21 @@ const loginAction = async (navigate, dispatch, values, t) => {
 
     setToken(token)
     setUsername(username)
-    dispatch(loginSuccess({ token }))
+    dispatch(loginSuccess({ token, username }))
 
-    try {
-      const [channelsData, messagesData] = await Promise.all([
-        getChannels(),
-        getMessages(),
-      ])
-      dispatch(setChannels(channelsData))
-      dispatch(setMessages(messagesData))
-      const general = channelsData.find(c => c.name === 'general')
-      dispatch(setCurrentChannelId(general?.id || channelsData[0]?.id))
-    }
-    catch (err) {
-      console.error(t('home.channels.loadError'), err)
-    }
+    const [channelsData, messagesData] = await Promise.all([
+      getChannels(),
+      getMessages(),
+    ])
+    dispatch(setChannels(channelsData))
+    dispatch(setMessages(messagesData))
+    const general = channelsData.find(c => c.name === 'general')
+    dispatch(setCurrentChannelId(general?.id || channelsData[0]?.id))
 
-    navigate('/')
+    navigate(appRoutes.home)
   }
   catch (error) {
+    console.error(t('auth.errors.serverError'), error)
     const message = error.response?.status === 401
       ? t('auth.errors.wrongLogin')
       : t('auth.errors.serverError')

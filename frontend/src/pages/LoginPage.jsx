@@ -1,23 +1,24 @@
-import { useFormik } from 'formik'
-import { Card, Button, Form } from 'react-bootstrap'
+import { useSelector } from 'react-redux'
 import { useNavigate, Link } from 'react-router-dom'
-import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
+import { Card, Button, Form } from 'react-bootstrap'
+import { useFormik } from 'formik'
 
 import Header from '../components/parts/Header'
-import loginAction from '../actions/loginAction'
+import appRoutes from '../routes/appRoutes'
+import useAuth from '../hooks/useAuth'
 import avatar from '../assets/avatar.jpg'
 
 const LoginPage = () => {
   const { t } = useTranslation()
-  const dispatch = useDispatch()
   const navigate = useNavigate()
+  const auth = useAuth()
   const { isLoading, error } = useSelector(state => state.auth)
 
   const formik = useFormik({
     initialValues: { username: '', password: '' },
     onSubmit: async (values) => {
-      await loginAction(navigate, dispatch, values, t)
+      await auth.login(values, t, navigate)
     },
   })
 
@@ -84,7 +85,7 @@ const LoginPage = () => {
                   </span>
                   <Button
                     as={Link}
-                    to="/signup"
+                    to={appRoutes.signup}
                     variant="link"
                     type="button"
                     className="p-0"

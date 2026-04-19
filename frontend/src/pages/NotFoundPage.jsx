@@ -4,10 +4,11 @@ import { ExclamationTriangle } from 'react-bootstrap-icons'
 import { useTranslation } from 'react-i18next'
 import Header from '../components/parts/Header'
 import { isAuthenticated } from '../utils/auth'
+import appRoutes from '../routes/appRoutes'
 
 const NotFoundPage = () => {
   const { t } = useTranslation()
-  const homeLink = isAuthenticated() ? '/' : '/login'
+  const homeLink = isAuthenticated() ? appRoutes.home : appRoutes.login
 
   return (
     <div className="d-flex flex-column h-100">

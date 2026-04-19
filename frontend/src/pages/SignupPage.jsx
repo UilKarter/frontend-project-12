@@ -1,18 +1,18 @@
-import { useFormik } from 'formik'
 import { useRef, useState } from 'react'
-import { Card, Form, Button } from 'react-bootstrap'
 import { useNavigate, Link } from 'react-router-dom'
-import { useDispatch } from 'react-redux'
 import { useTranslation } from 'react-i18next'
+import { Card, Form, Button } from 'react-bootstrap'
+import { useFormik } from 'formik'
 
 import Header from '../components/parts/Header'
-import signupAction from '../actions/signupAction'
+import appRoutes from '../routes/appRoutes'
+import useAuth from '../hooks/useAuth'
 import signupSchema from '../utils/schemas/signupSchema'
 import avatar from '../assets/avatar_1.jpg'
 
 const SignupPage = () => {
   const { t } = useTranslation()
-  const dispatch = useDispatch()
+  const auth = useAuth()
   const navigate = useNavigate()
   const inputRef = useRef(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -25,7 +25,7 @@ const SignupPage = () => {
     onSubmit: async (values, { setFieldError }) => {
       setIsSubmitting(true)
       try {
-        await signupAction(navigate, dispatch, values, { setFieldError }, t)
+        await auth.signup(values, { setFieldError }, t, navigate)
       }
       finally {
         setIsSubmitting(false)
@@ -131,7 +131,7 @@ const SignupPage = () => {
                   </span>
                   <Button
                     as={Link}
-                    to="/login"
+                    to={appRoutes.login}
                     variant="link"
                     type="button"
                     className="p-0"

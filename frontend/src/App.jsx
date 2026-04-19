@@ -2,7 +2,9 @@ import { Routes, Route, Navigate } from 'react-router-dom'
 import { ToastContainer } from 'react-toastify'
 import { Provider as RollbarProvider, ErrorBoundary } from '@rollbar/react'
 
-import { SocketProvider } from './contexts/SocketProvider'
+import AuthProvider from './contexts/AuthProvider'
+import SocketProvider from './contexts/SocketProvider'
+import appRoutes from './routes/appRoutes'
 import HomePage from './pages/HomePage'
 import LoginPage from './pages/LoginPage'
 import NotFoundPage from './pages/NotFoundPage'
@@ -21,24 +23,26 @@ const App = () => {
   return (
     <RollbarProvider config={rollbarConfig}>
       <ErrorBoundary>
-        <SocketProvider>
-          <Routes>
-            <Route
-              path="/"
-              element={(
-                <ProtectedRoute>
-                  <HomePage />
-                </ProtectedRoute>
-              )}
-            />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/signup" element={<SignupPage />} />
-            <Route path="/404" element={<NotFoundPage />} />
-            <Route path="*" element={<Navigate to="/404" replace />} />
-          </Routes>
-          <ToastContainer />
-          <ModalRoot />
-        </SocketProvider>
+        <AuthProvider>
+          <SocketProvider>
+            <Routes>
+              <Route
+                path={appRoutes.home}
+                element={(
+                  <ProtectedRoute>
+                    <HomePage />
+                  </ProtectedRoute>
+                )}
+              />
+              <Route path={appRoutes.login} element={<LoginPage />} />
+              <Route path={appRoutes.signup} element={<SignupPage />} />
+              <Route path={appRoutes.notFound} element={<NotFoundPage />} />
+              <Route path="*" element={<Navigate to={appRoutes.notFound} replace />} />
+            </Routes>
+            <ToastContainer />
+            <ModalRoot />
+          </SocketProvider>
+        </AuthProvider>
       </ErrorBoundary>
     </RollbarProvider>
   )

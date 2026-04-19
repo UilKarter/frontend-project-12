@@ -1,6 +1,6 @@
 import { useSelector, useDispatch } from 'react-redux'
-import { ListGroup, Button } from 'react-bootstrap'
 import { useTranslation } from 'react-i18next'
+import { ListGroup, Button } from 'react-bootstrap'
 
 import { channelsSelectors, setCurrentChannelId } from '../../../store/slices/channelsSlice'
 import { openModal } from '../../../store/slices/modalSlice'

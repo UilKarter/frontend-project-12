@@ -4,7 +4,7 @@ const modalSlice = createSlice({
   name: 'modal',
   initialState: {
     isOpen: false,
-    type: null, // 'add', 'rename', 'remove'
+    type: null,
     data: null,
   },
   reducers: {

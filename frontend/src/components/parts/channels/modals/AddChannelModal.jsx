@@ -1,15 +1,19 @@
 import { useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { useFormik } from 'formik'
-import { Modal, Button, Form } from 'react-bootstrap'
+import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
+import { Modal, Button, Form } from 'react-bootstrap'
+import { useFormik } from 'formik'
+import { toast } from 'react-toastify'
 
-import postChannelAction from '../../../../actions/postChannelAction'
+import useApi from '../../../../hooks/useApi'
 import { channelsSelectors } from '../../../../store/slices/channelsSlice'
 import postChannelSchema from '../../../../utils/schemas/postChannelSchema'
 
 const AddChannelModal = ({ show, onHide }) => {
   const { t } = useTranslation()
+  const navigate = useNavigate()
+  const api = useApi()
   const inputRef = useRef(null)
   const dispatch = useDispatch()
 
@@ -22,10 +26,11 @@ const AddChannelModal = ({ show, onHide }) => {
     enableReinitialize: true,
     onSubmit: async (values, helpers) => {
       try {
-        await postChannelAction(() => onHide(), dispatch, values, helpers, t)
+        await api.postChannelAction(() => onHide(), dispatch, values, helpers, t, navigate)
       }
       catch (e) {
-        console.error(e)
+        console.error('Error creating channel', e)
+        toast.error(t('home.channels.actions.createError'))
       }
       finally {
         helpers.setSubmitting(false)

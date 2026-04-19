@@ -1,20 +1,16 @@
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Container, Row, Col, Spinner } from 'react-bootstrap'
+import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
+import { Container, Row, Col, Spinner } from 'react-bootstrap'
 import { toast } from 'react-toastify'
 
+import { setChannels, setCurrentChannelId } from '../store/slices/channelsSlice'
+import { setMessages } from '../store/slices/messagesSlice'
+
+import appRoutes from '../routes/appRoutes'
 import getChannels from '../api/getChannels'
 import getMessages from '../api/getMessages'
-
-import {
-  setChannels,
-  setCurrentChannelId,
-} from '../store/slices/channelsSlice'
-import {
-  setMessages,
-} from '../store/slices/messagesSlice'
-
 import Header from '../components/parts/Header'
 import ChannelsList from '../components/parts/channels/ChannelList'
 import MessagesHeader from '../components/parts/messages/MessagesHeader'
@@ -27,6 +23,8 @@ const HomePage = () => {
   const currentChannelId = useSelector(state => state.channels.currentChannelId)
   const channels = useSelector(state => state.channels.entities)
   const [isLoading, setIsLoading] = useState(!Object.keys(channels).length)
+
+  const navigate = useNavigate()
 
   useEffect(() => {
     if (!isLoading) return
@@ -43,7 +41,10 @@ const HomePage = () => {
         dispatch(setCurrentChannelId(general?.id || channelsData[0]?.id))
       }
       catch (err) {
-        console.error('Ошибка загрузки данных:', err)
+        if (err?.response?.status === 401) {
+          navigate(appRoutes.login)
+          return
+        }
         toast.error(t('home.messages.loadError'))
       }
       finally {
@@ -52,7 +53,7 @@ const HomePage = () => {
     }
 
     fetchData()
-  }, [dispatch, isLoading, t])
+  }, [dispatch, isLoading, navigate, t])
 
   if (isLoading) {
     return (

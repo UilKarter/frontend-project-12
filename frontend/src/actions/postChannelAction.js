@@ -1,25 +1,30 @@
 import { toast } from 'react-toastify'
 import postChannel from '../api/postChannel'
-import { addChannel, setCurrentChannelId } from '../store/slices/channelsSlice'
 import filter from '../utils/profanityFilter'
+import appRoutes from '../routes/appRoutes'
+import { removeToken, removeUsername } from '../utils/auth'
+import { setCurrentChannelId } from '../store/slices/channelsSlice'
 
-const postChannelAction = async (closeModal, dispatch, values, { resetForm }, t) => {
+const postChannelAction = async (closeModal, dispatch, values, { resetForm }, t, navigate) => {
   try {
     const cleanedName = filter.clean(values.name)
     const newChannel = await postChannel(cleanedName)
 
-    dispatch(addChannel(newChannel))
-    dispatch(setCurrentChannelId(newChannel.id))
-
     resetForm()
     closeModal()
+    dispatch(setCurrentChannelId(newChannel.id))
 
     toast.success(t('home.channels.actions.createSuccess'))
   }
   catch (e) {
-    console.error(e)
+    console.error(t('home.channels.actions.createError'), e)
+    if (e?.response?.status === 401) {
+      removeToken()
+      removeUsername()
+      navigate(appRoutes.login)
+      return
+    }
     toast.error(t('home.channels.actions.createError'))
-    throw e
   }
 }
 

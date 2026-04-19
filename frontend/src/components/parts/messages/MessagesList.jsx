@@ -11,7 +11,7 @@ const MessagesList = ({ channelId }) => {
   )
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
-  }, [filteredMessages.length])
+  }, [filteredMessages.length, channelId])
 
   return (
     <div className="flex-grow-1 overflow-auto p-3 bg-white">

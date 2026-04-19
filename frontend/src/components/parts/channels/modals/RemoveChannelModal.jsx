@@ -1,20 +1,25 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Modal, Button } from 'react-bootstrap'
 import { useTranslation } from 'react-i18next'
-import removeChannelAction from '../../../../actions/removeChannelAction'
+import { toast } from 'react-toastify'
+import useApi from '../../../../hooks/useApi'
 
 const RemoveChannelModal = ({ channelId, show, onHide }) => {
   const { t } = useTranslation()
+  const navigate = useNavigate()
+  const api = useApi()
   const [isLoading, setIsLoading] = useState(false)
 
   const handleRemove = async () => {
     setIsLoading(true)
     try {
-      await removeChannelAction(channelId, t)
+      await api.removeChannelAction(channelId, t, navigate)
       onHide()
     }
     catch (e) {
-      console.error(e)
+      console.error('Error removing channel', e)
+      toast.error(t('home.channels.actions.removeError'))
     }
     finally {
       setIsLoading(false)

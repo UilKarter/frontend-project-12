@@ -1,7 +1,8 @@
 import { toast } from 'react-toastify'
 import signupReq from '../api/signupReq'
+import appRoutes from '../routes/appRoutes'
 import { loginStart, loginSuccess, loginFailure } from '../store/slices/authSlice'
-import { setToken, setUsername } from '../utils/auth'
+import { setToken, setUsername, removeToken, removeUsername } from '../utils/auth'
 import getChannels from '../api/getChannels'
 import getMessages from '../api/getMessages'
 import { setChannels, setCurrentChannelId } from '../store/slices/channelsSlice'
@@ -28,12 +29,19 @@ const signupAction = async (navigate, dispatch, values, { setFieldError }, t) =>
     }
     catch (err) {
       console.error(t('home.messages.loadError'), err)
+      if (err?.response?.status === 401) {
+        removeToken()
+        removeUsername()
+        navigate(appRoutes.login)
+        return
+      }
       toast.error(t('home.messages.loadError'))
     }
 
-    navigate('/')
+    navigate(appRoutes.home)
   }
   catch (error) {
+    console.error(t('auth.errors.serverError'), error)
     if (error.response?.status === 409) {
       setFieldError('username', t('auth.errors.alreadyCreated'))
     }
