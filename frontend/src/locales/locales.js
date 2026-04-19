@@ -5,6 +5,7 @@ export default {
         channels: {
           hash: '#',
           plus: '+',
+          add: 'Добавить канал',
           header: 'Каналы',
           dropdownToggle: 'Управление каналом',
           dropdownRename: 'Переименовать',
@@ -20,7 +21,6 @@ export default {
           },
           modals: {
             nameLabel: 'Имя канала',
-            postTitle: 'Добавить канал',
             removeTitle: 'Удалить канал',
             renameTitle: 'Переименовать канал',
             cancelButton: 'Отмена',
@@ -37,6 +37,7 @@ export default {
           submitError: 'Ошибка отправки сообщения: ',
           loadError: 'Не удалось загрузить сообщения.',
           newMessage: 'Новое сообщение',
+          separator: ': ',
         },
       },
       auth: {
@@ -78,6 +79,9 @@ export default {
       header: {
         brand: 'Hexlet Chat',
         logoutButton: 'Выйти',
+      },
+      utils: {
+        loading: '…',
       },
       socket: {
         connectError: 'Ошибка соединения с сервером.',

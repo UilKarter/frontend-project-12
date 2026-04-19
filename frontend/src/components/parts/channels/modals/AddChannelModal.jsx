@@ -20,22 +20,24 @@ const AddChannelModal = ({ show, onHide }) => {
   const channels = useSelector(channelsSelectors.selectAll)
   const channelNames = channels.map(ch => ch.name)
 
+  const handleSubmit = async (values, helpers) => {
+    try {
+      await api.postChannelAction(() => onHide(), dispatch, values, helpers, t, navigate)
+    }
+    catch (e) {
+      console.error(t('home.channels.actions.createError'), e)
+      toast.error(t('home.channels.actions.createError'))
+    }
+    finally {
+      helpers.setSubmitting(false)
+    }
+  }
+
   const formik = useFormik({
     initialValues: { name: '' },
     validationSchema: postChannelSchema(channelNames, t),
     enableReinitialize: true,
-    onSubmit: async (values, helpers) => {
-      try {
-        await api.postChannelAction(() => onHide(), dispatch, values, helpers, t, navigate)
-      }
-      catch (e) {
-        console.error('Error creating channel', e)
-        toast.error(t('home.channels.actions.createError'))
-      }
-      finally {
-        helpers.setSubmitting(false)
-      }
-    },
+    onSubmit: handleSubmit,
   })
 
   const handleEnter = () => {
@@ -47,7 +49,7 @@ const AddChannelModal = ({ show, onHide }) => {
   return (
     <Modal show={show} onHide={onHide} centered onEnter={handleEnter}>
       <Modal.Header closeButton>
-        <Modal.Title>{t('home.channels.modals.postTitle')}</Modal.Title>
+        <Modal.Title>{t('home.channels.add')}</Modal.Title>
       </Modal.Header>
       <Form onSubmit={formik.handleSubmit}>
         <Modal.Body>

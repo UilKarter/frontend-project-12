@@ -27,6 +27,7 @@ const CustomChannel = ({ channel, isActive, onClick }) => {
           split
           variant={isActive ? 'secondary' : 'light'}
           aria-label={t('home.channels.dropdownToggle')}
+          title={t('home.channels.dropdownToggle')}
         >
           <span className="visually-hidden">{t('home.channels.dropdownToggle')}</span>
         </Dropdown.Toggle>

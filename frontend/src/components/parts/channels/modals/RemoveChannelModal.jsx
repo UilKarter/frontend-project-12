@@ -18,7 +18,7 @@ const RemoveChannelModal = ({ channelId, show, onHide }) => {
       onHide()
     }
     catch (e) {
-      console.error('Error removing channel', e)
+      console.error(t('home.channels.actions.removeError'), e)
       toast.error(t('home.channels.actions.removeError'))
     }
     finally {
@@ -38,7 +38,7 @@ const RemoveChannelModal = ({ channelId, show, onHide }) => {
             {t('home.channels.modals.cancelButton')}
           </Button>
           <Button variant="danger" onClick={handleRemove} disabled={isLoading}>
-            {isLoading ? '…' : t('home.channels.modals.removeButton')}
+            {isLoading ? t('utils.loading') : t('home.channels.modals.removeButton')}
           </Button>
         </div>
       </Modal.Body>

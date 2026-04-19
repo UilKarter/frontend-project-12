@@ -15,11 +15,13 @@ const LoginPage = () => {
   const auth = useAuth()
   const { isLoading, error } = useSelector(state => state.auth)
 
+  const handleSubmit = async (values) => {
+    await auth.login(values, t, navigate)
+  }
+
   const formik = useFormik({
     initialValues: { username: '', password: '' },
-    onSubmit: async (values) => {
-      await auth.login(values, t, navigate)
-    },
+    onSubmit: handleSubmit,
   })
 
   return (

@@ -18,23 +18,25 @@ const RenameChannelModal = ({ channel, show, onHide }) => {
   const channels = useSelector(channelsSelectors.selectAll)
   const channelNames = channels.map(ch => ch.name)
 
+  const handleSubmit = async (values, helpers) => {
+    try {
+      await api.renameChannelAction(channel.id, values.name, t, navigate)
+      onHide()
+    }
+    catch (e) {
+      console.error(t('home.channels.actions.renameError'), e)
+      toast.error(t('home.channels.actions.renameError'))
+    }
+    finally {
+      helpers.setSubmitting(false)
+    }
+  }
+
   const formik = useFormik({
     initialValues: { name: channel.name },
     enableReinitialize: true,
     validationSchema: renameChannelSchema(channelNames, channel.name, t),
-    onSubmit: async (values, helpers) => {
-      try {
-        await api.renameChannelAction(channel.id, values.name, t, navigate)
-        onHide()
-      }
-      catch (e) {
-        console.error('Error renaming channel', e)
-        toast.error(t('home.channels.actions.renameError'))
-      }
-      finally {
-        helpers.setSubmitting(false)
-      }
-    },
+    onSubmit: handleSubmit,
   })
 
   const handleEnter = () => {

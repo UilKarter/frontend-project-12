@@ -30,6 +30,7 @@ const ChannelsList = () => {
           variant="outline-primary"
           size="sm"
           onClick={handleAddChannel}
+          title={t('home.channels.add')}
           aria-label={t('home.channels.add')}
         >
           {t('home.channels.plus')}

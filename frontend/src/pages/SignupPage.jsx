@@ -17,20 +17,22 @@ const SignupPage = () => {
   const inputRef = useRef(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
 
+  const handleSubmit = async (values, { setFieldError }) => {
+    setIsSubmitting(true)
+    try {
+      await auth.signup(values, { setFieldError }, t, navigate)
+    }
+    finally {
+      setIsSubmitting(false)
+    }
+  }
+
   const formik = useFormik({
     initialValues: { username: '', password: '', confirmPassword: '' },
     validationSchema: signupSchema(t),
     validateOnBlur: true,
     validateOnChange: true,
-    onSubmit: async (values, { setFieldError }) => {
-      setIsSubmitting(true)
-      try {
-        await auth.signup(values, { setFieldError }, t, navigate)
-      }
-      finally {
-        setIsSubmitting(false)
-      }
-    },
+    onSubmit: handleSubmit,
   })
 
   return (
